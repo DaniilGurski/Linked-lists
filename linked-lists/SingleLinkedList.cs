@@ -1,5 +1,5 @@
 class SingleLinkedList<T> {
-    Node<T> head;
+    Node<T>? head;
     public SingleLinkedList() {
         head = null;
     }
@@ -21,7 +21,7 @@ class SingleLinkedList<T> {
             return;
         }
 
-        Node<T> temp = head;
+        Node<T>? temp = head;
         while (temp.Next != null) {
             temp = temp.Next;
         }
@@ -35,7 +35,7 @@ class SingleLinkedList<T> {
             return;
         }
 
-        Node<T> temp = head;
+        Node<T>? temp = head;
         // Add node in postion if its not out of range
         for (int i = 0; i < position - 1; i++) {
             if (temp == null) {
@@ -94,5 +94,58 @@ class SingleLinkedList<T> {
             Console.Write(temp.Data + " ");
             temp = temp.Next;
         }
+    }
+
+    public void bubbleSort() {
+        bool swapped;
+        
+        // Listan är tom eller har bara ett element
+        if (head == null || head.Next == null) {
+            return; 
+        }
+
+        do {
+            swapped = false;
+            Node<T>? current = head;
+            Node<T>? prev = null;
+
+            while (current != null && current.Next != null)
+            {
+                if (Comparer<T>.Default.Compare(current.Data, current.Next.Data) > 0) {
+                    // Byt noder genom att justera pointer
+                    Node<T>? next = current.Next;
+                    current.Next = next.Next;
+                    next.Next = current;
+
+                    if (prev == null) {
+                        head = next; // Uppdatera huvudet om de två första noderna byts ut
+                    }
+                    else {
+                        prev.Next = next;
+                    }
+
+                    swapped = true;
+                }
+
+                prev = (swapped && prev == null) ? head : current;
+                current = current.Next;
+            }
+        } while (swapped);
+    }
+
+
+    public void reverseList() {
+        Node<T>? prev = null;
+        Node<T>? current = head;
+        Node<T>? next = null;
+
+        while (current != null) {
+            next = current.Next; // Store next node
+            current.Next = prev; // Reverse the link
+            prev = current;      // Move prev to current node
+            current = next;      // Move to next node
+        }
+
+        head = prev; // Update head to the new first node
     }
 }
